@@ -135,7 +135,7 @@ HTTP/1.1允许在*持久连接上*可选地使用请求管道。这是在*keep-a
 - - 发送端应该做好数据没有发送完连接就关闭的准备并开始重新发送数据。
 
 - - HTTP客户端不应该用管道化的方式发送会产生副作用的请求（比如POST）。
-
+![image](https://github.com/Anaethesia/http/blob/master/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/IMG_1800.PNG)
 
 ##### 关闭连接的奥秘
 *
