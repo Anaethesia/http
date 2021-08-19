@@ -70,7 +70,7 @@
 
 #### Cookie
 
-* 分类：会话Cookie（非持久Cookie）和持久Cookie
+* 分类：会话Cookie（非持久Cookie）和持久Cookie    存储在硬盘上，二者唯一区别就是过期时间。  可以把cookie理解为贴纸一样。
 
 * 原理：用户第一次请求服务器时，服务器返回一个带Set-Cookie（Set-Cookie1）首部的报文，值为键值对，描述了cookie的名字、值、域、路径等信息，然后客户端接下来每次访问服务器的时候都会带上一个Cookie首部的报文，它的值刚好是前面响应报文返回的名字键值对，从而达到验证用户身份的信息。
 
@@ -128,9 +128,49 @@
 ```
 
 
+#### cookie跟踪用户的例子
+```
+//(a)客户端:首次请求Amazon.com根页面
+GET / HTTP/1.0
+Host: www.amazon.com
 
+// (b)服务器:将客户端重定向到一个电子商务软件的URL上
+HTTP/1.1 302 Found
+Location: http://www.amazon.com:80/exec/obidos/subst/home/redirect.html
 
+// (c)客户端:对重定向的URL发送一个请求
+GET /exec/obidos/subst/home/redirect.html HTTP/1.0
+Host: www.amazon.com
 
+// (d)服务器:在响应上贴上两个会话cookie,并将用户重定向到另一个URL,这样客户端就会用这些附加的cookie再次发出请求
+HTTP/1.1 302 Found
+Date: Sun, 02 Dec 2001 03:20:47 GMT
+Set-cookie: session-id&#61;002-1145265-8016838; path&#61;/; domain&#61;.amazon.com;
+    expires&#61;Sunday, 09-Dec-2001 08:00:00 GMT
+Set-cookie: session-id-time&#61;1007884800; path&#61;/; domain&#61;.amazon.com;
+    expires&#61;Sunday, 09-Dec-2001 08:00:00 GMT
+
+// (e)客户端发送新的URL(胖URL,将某些状态嵌入到URL中去了), 同时传送2个附加的cookie
+GET /exec/obidos/subst/home/redirect.html/ 002-1145265-8016838 HTTP/1.0
+Host: www.amazon.com
+Cookie: session-id&#61;002-1145265-8016838; session-id-time&#61;1007884800
+
+// (f)服务器重新定向到home.html页面,并附加另外两个cookie
+HTTP/1.1 302 Found
+Date: Sun, 02 Dec 2001 03:45:40 GMT
+Set-Cookie: ubid-main&#61;430-8248051-6231206; path&#61;/; domain.amazon.com;
+    expires&#61;Tuesday, 01-Jan-2036 08:00:01 GMT
+Location: http://www.amazon.com/exec/obidos/subst/home/home.html/002-1145265-8016838
+Set-cookie: x-main&#61;&#34;h0...Bf; path&#61;/; domain&#61;.amazon.com;
+    expires&#61;Tuesday, 01-Jan-2036 08:00:01 GMT
+
+// (g)客户端获取home.html页面并将所有四个cookie都发送出去
+GET /exec/obidos/subst/home/home.html/002-1145265-8016838 HTTP/1.0
+Host: www.amazon.com
+Cookie: session-id&#61;002-1145265-8016838; session-id-time&#61;1007884800; ubid-main&#61;430-8248051-6231206; x-main&#61;&#34;h0...Bf&#34;
+
+// (h)服务器返回页面内容
+```
 
 
 
