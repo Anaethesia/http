@@ -32,6 +32,7 @@
 1、Accept首部集
 
 2、User-Agent
+![image](https://github.com/Anaethesia/http/tree/master/第十七章%20内容协商与转码/IMG_1081.jpg)
 
 #### 内容协商首部集
 
